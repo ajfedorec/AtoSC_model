@@ -245,10 +245,10 @@ def AtoSC_ori_d_dot(s, t, params):
 
 def AtoSC_ori_s_dot(s, t, params):
     ## PARAMETERS
-    k_b1, k_d1, k_b2, k_d2, k_b3, k_d3, k_ap, k_ad, k_pt, k_ph, k_deg, k_bnd, k_unbnd, k_pmgexp, k_mgbnd, k_gexp, k_mat, k_mgdeg, k_lgexp = params
+    k_b1, k_d1, k_b2, k_d2, k_b3, k_d3, k_ap, k_ad, k_pt, k_ph, k_deg, k_bnd, k_unbnd, k_pmgexp, k_gexp, k_mgdeg, k_lgexp = params
 
     ## SPECIES
-    C, S, Cp, Sp, pato, CS, CSp, CpS, patoCp, GFP, mGFP, R, mGFPR, uGFP = s
+    C, S, Cp, Sp, pato, CS, CSp, CpS, patoCp, GFP, mGFP = s
 
     ## REACTIONS
     # AtoC binds AtoSP: C + Sp -> CSp
@@ -291,18 +291,20 @@ def AtoSC_ori_s_dot(s, t, params):
     r25 = patoCp * k_pmgexp
     # # GFP transcription: patoC -> patoC + mGFP
     # r26 = patoC * k_npmgexp
-    # Ribosome binding mRNA: mGFP + R -> mGFPR
-    r27 = mGFP * R * k_mgbnd
-    # GFP translation: mGFPR -> mGFP + R + uGFP
-    r28 = mGFPR * k_gexp
-    # GFP maturation: uGFP -> GFP
-    r29 = uGFP * k_mat
+    # # Ribosome binding mRNA: mGFP + R -> mGFPR
+    # r27 = mGFP * R * k_mgbnd
+    # # GFP translation: mGFPR -> mGFP + R + uGFP
+    # r28 = mGFPR * k_gexp
+    # # GFP maturation: uGFP -> GFP
+    # r29 = uGFP * k_mat
     # mRNA degradation: mGFP -> 0
     r30 = mGFP * k_mgdeg
     # leaky GFP transcription: pato -> pato + mGFP
     r32 = pato * k_lgexp
-    # uGFP degredation: uGFP -> 0
-    r33 = uGFP * k_deg
+    # # uGFP degredation: uGFP -> 0
+    # r33 = uGFP * k_deg
+    # GFP translation: mGFP -> mGFP + GFP
+    r34 = mGFP * k_gexp
 
     ## ODEs
     dC = r2 + r6 - r1 - r5
@@ -313,14 +315,11 @@ def AtoSC_ori_s_dot(s, t, params):
     dCS = r5 + r10 - r6
     dCSp = r1 - r2 - r9
     dCpS = r3 + r9 - r4 - r10
-    dGFP = r29 - r20
+    dGFP = r34 - r20
     dpatoCp = r21 - r22
-    dmGFP = r25 + r28 + r32 - r27 - r30
-    dR = r28 - r27
-    dmGFPR = r27 - r28
-    duGFP = r28 - r29 - r33
+    dmGFP = r25 + r32 - r30
 
-    ds = (dC, dS, dCp, dSp, dpato, dCS, dCSp, dCpS, dpatoCp, dGFP, dmGFP, dR, dmGFPR, duGFP)
+    ds = (dC, dS, dCp, dSp, dpato, dCS, dCSp, dCpS, dpatoCp, dGFP, dmGFP)
 
     return ds
 

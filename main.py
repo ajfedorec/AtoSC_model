@@ -27,43 +27,43 @@ def select_model(model_name):
 
     full_param_dict = {'k_b1': 0.5,  # AtoC binds AtoSP
                        'k_d1': 0.5,  # AtoC unbinds AtoSP
-                       'k_b2': 0.05,  # AtoCP binds AtoS
+                       'k_b2': 0.5,  # AtoCP binds AtoS
                        'k_d2': 0.5,  # AtoCP unbinds AtoS
                        'k_b3': 0.5,  # AtoC binds AtoS
                        'k_d3': 0.5,  # AtoC unbinds AtoS
-                       'k_ap': 0.15,  # Acetoacetate phosphorylates AtoS
+                       'k_ap': 0.1,  # Acetoacetate phosphorylates AtoS
                        'k_ad': 0.001,  # Dephosphorylation of AtoSP
                        'k_pt': 1.5,  # Phosphorylation of AtoC
-                       'k_ph': 0.001,  # Dephosphorylation of AtoC
-                       'k_dim': 0.0083,  # Dimerisation of AtoCP, from Merk et al., Biorxiv, 2020
-                       'k_mon': 0.5,  # Monomeristaion of AtoCP, from Merk et al., Biorxiv, 2020
-                       'k_dbnd': 0.5,  # Promoter binding - phosphorylated dimer
-                       'k_dunbnd': 0.05,  # Promoter unbinding - phosphorylated dimer
-                       'k_b4': 0.5,  # Binding of alternative dephosphatase
-                       'k_d4': 0.5,  # Unbinding of alternative dephosphatase
-                       'k_cat': 0.05,  # Alternative dephosphorylation
-                       'k_exp': 0.08,  # GFP expression
-                       'k_lexp': 0.00008,  # Leaky GFP expression
-                       'k_deg': 0.00057,  # GFP degradation
+                       'k_ph': 0.05,  # Dephosphorylation of AtoC
+                       #'k_dim': 0.0083,  # Dimerisation of AtoCP, from Merk et al., Biorxiv, 2020
+                       #'k_mon': 0.5,  # Monomeristaion of AtoCP, from Merk et al., Biorxiv, 2020
+                       #'k_dbnd': 0.5,  # Promoter binding - phosphorylated dimer
+                       #'k_dunbnd': 0.05,  # Promoter unbinding - phosphorylated dimer
+                       #'k_b4': 0.5,  # Binding of alternative dephosphatase
+                       #'k_d4': 0.5,  # Unbinding of alternative dephosphatase
+                       #'k_cat': 0.05,  # Alternative dephosphorylation
+                       #'k_exp': 0.08,  # GFP expression
+                       #'k_lexp': 0.00008,  # Leaky GFP expression
+                       'k_deg': 0.0004,  # GFP degradation ~ 30 min half life
                        'k_bnd': 0.5,  # Promoter binding - phosphorylated monomer
                        'k_unbnd': 0.05,  # Promoter unbinding - phosphorylated monomer
-                       'k_nsbnd': 0.01,  # Promoter binding - unphosphorylated monomer
-                       'k_nsunbnd': 0.001,  # Promoter unbinding - unphosphorylated monomer
-                       'k_pmgexp': 0.07,  # GFP transcription - phosphorylated monomer
-                       'k_npmgexp': 0.007,  # GFP transcription - unphosphorylated monomer
-                       'k_mgbnd': 0.5,  # Ribosome binding mRNA
-                       'k_gexp': 0.08,  # GFP translation
-                       'k_mat': 0.00042,  # GFP maturation
-                       'k_mgdeg': 0.00223,  # mRNA degradation
+                       #'k_nsbnd': 0.01,  # Promoter binding - unphosphorylated monomer
+                       #'k_nsunbnd': 0.001,  # Promoter unbinding - unphosphorylated monomer
+                       'k_pmgexp': 0.04,  # GFP transcription - phosphorylated monomer
+                       #'k_npmgexp': 0.007,  # GFP transcription - unphosphorylated monomer
+                       # 'k_mgbnd': 0.5,  # Ribosome binding mRNA
+                       'k_gexp': 0.04,  # GFP translation ~ 238 aa @ 10 aa s^-1
+                       'k_mat': 0.0015,  # GFP maturation ~ 10 min
+                       'k_mgdeg': 0.002,  # mRNA degradation ~ 5 min half life
                        'k_dmgexp': 0.07,  # GFP transcription - phosphorylated dimer
-                       'k_lgexp': 0.00007}  # leaky GFP transcription
+                       'k_lgexp': 0.0004}  # leaky GFP transcription
 
-    full_init_dict = {'C': 6.0,
-                      'S': 0.17,
+    full_init_dict = {'C': 0.1,  # uM = ~100 per cell i.e. p15A plasmid
+                      'S': 0.01,  # uM = ~10 per cell i.e. p15A plasmid
                       'Cp': 0.00,
                       'Sp': 0.00,
-                      'pato': 10.0,
-                      'Ph': 0.17,
+                      'pato': 0.01,  # uM = ~10 copies per cell i.e. p15A plasmid
+                      # 'Ph': 0.17,
                       'Cpd': 0.00,
                       'CS': 0.00,
                       'CSp': 0.00,
@@ -74,8 +74,8 @@ def select_model(model_name):
                       'patoC': 0.00,
                       'GFP': 0.00,
                       'mGFP': 0.00,
-                      'R': 10.00,
-                      'mGFPR': 0.00,
+                      # 'R': 50.00,  # uM = ~50,000 per cell
+                      # 'mGFPR': 0.00,
                       'uGFP': 0.00
                       }
 
@@ -91,11 +91,9 @@ def select_model(model_name):
 
     elif model_name == 'original_simple':
         model_params = ['k_b1', 'k_d1', 'k_b2', 'k_d2', 'k_b3', 'k_d3', 'k_ap', 'k_ad', 'k_pt', 'k_ph', 'k_deg',
-                        'k_bnd', 'k_unbnd', 'k_pmgexp', 'k_mgbnd', 'k_gexp', 'k_mat', 'k_mgdeg', 'k_lgexp']
+                        'k_bnd', 'k_unbnd', 'k_pmgexp', 'k_gexp', 'k_mgdeg', 'k_lgexp']
 
-
-        model_species = ['C', 'S', 'Cp', 'Sp', 'pato', 'CS', 'CSp', 'CpS', 'patoCp', 'GFP',
-                         'mGFP', 'R', 'mGFPR', 'uGFP']
+        model_species = ['C', 'S', 'Cp', 'Sp', 'pato', 'CS', 'CSp', 'CpS', 'patoCp', 'GFP', 'mGFP']
 
         model_func = AtoSC_ori_s_dot
 
@@ -374,9 +372,9 @@ if __name__ == '__main__':
                    'C', 'S', 'pato']
 
     k_ap_space = np.logspace(-9, 1, 64)  # define parameter search space
-    # run_morris()
-    # sim_weird_morris()
-    sim_rand_morris()
+    run_morris()
+    sim_weird_morris()
+    # sim_rand_morris()
 
 
 
